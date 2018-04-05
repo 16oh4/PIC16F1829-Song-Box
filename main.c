@@ -193,6 +193,10 @@ void main()
     {
 //        
         //CARLOS LCD HERE
+        int dummy = 0;
+        I2C_LCD_Pos(I2C_SLAVE, 0x00);
+        sprintf(Sout, "Song ",dummy); //
+        I2C_LCD_SWrite(I2C_SLAVE, Sout, 6);
         //C
         playSong(song5, length5, 38);
         

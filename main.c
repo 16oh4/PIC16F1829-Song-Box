@@ -33,6 +33,18 @@
 #define C2 127
 #define x 14
 
+// From Carlos 
+#define I2C_SLAVE 0x27	/* was 1E Channel of i2c slave depends on soldering on back of board*/
+#define _XTAL_FREQ 4000000.0    /*for 4mhz*/
+// Prototypes from Carlos
+void I2C_LCD_Command(unsigned char,unsigned char);
+void I2C_LCD_SWrite(unsigned char,unsigned char *, char);
+void I2C_LCD_Init(unsigned char);
+void I2C_LCD_Pos(unsigned char,unsigned char);
+unsigned char I2C_LCD_Busy(unsigned char);
+
+
+
 int songnum = 0;
 int song[x]={C, C, G, G, A, A, G, F, F, E, E, D, D, C}; //insert notes of song in array
 int song2[x]={
@@ -185,6 +197,16 @@ void playSong(int beat[], int time[], int notes)
 
 void main()
 {
+    
+    // From Carlos
+    unsigned char  Sout[16];
+	unsigned char * Sptr;
+    int z;
+	Sptr = Sout;
+    
+    //Clock and Pin Configs
+	OSCCON  = 0x68; /* b6..4 = 1101 = 4MHz */
+
     TRISC3 = 0;
     PWM_Initialize();
     PWM_Duty(1000); //volume
@@ -193,6 +215,11 @@ void main()
     {
 //        
         //CARLOS LCD HERE
+        int dummy = 0;
+        I2C_LCD_Pos(I2C_SLAVE, 0x00);
+        sprintf(Sout, "Song ",dummy); //
+        I2C_LCD_SWrite(I2C_SLAVE, Sout, 6);
+        //C
         playSong(song5, length5, 38);
         
         
